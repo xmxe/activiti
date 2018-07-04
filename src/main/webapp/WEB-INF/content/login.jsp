@@ -28,7 +28,7 @@
 			<div class="box">
 				<div class="box-content">
 					<div class="text-center">
-						<h3 class="page-header">Spring-activiti Login Page</h3>
+						<h3 class="page-header">activiti Login Page</h3>
 					</div>
 					<form action="loginvalidate" method="post">
 					<div class="form-group">

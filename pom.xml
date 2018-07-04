@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>activiti</groupId>
-  <artifactId>Spring-activiti</artifactId>
+  <artifactId>activiti</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Spring-activiti</name>
+  <name>activiti</name>
   <url>http://maven.apache.org</url> 
 	<profiles>
 		<profile>
@@ -197,7 +197,7 @@
 	    
   </dependencies>
   <build>
-    <finalName>Spring-activiti</finalName>
+    <finalName>activiti</finalName>
   </build>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
