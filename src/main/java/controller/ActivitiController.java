@@ -59,17 +59,17 @@ import com.alibaba.fastjson.JSON;
 @Controller
 public class ActivitiController {
 	@Autowired
-	RepositoryService rep;
+	RepositoryService rep;//流程存储服务组件
 	@Autowired
-	RuntimeService runservice;
+	RuntimeService runservice;//使用RuntimeService提供的方法对流程进行控制
 	@Autowired
 	FormService formservice;
 	@Autowired
-	IdentityService identityservice;
+	IdentityService identityservice;//在Activiti中内置了一套简单的对用户和用户组的支持，用于满足基本的业务需求。org.activiti.engine.identity该包用来进行身份管理和认证，其功能依托于IdentityService接口
 	@Autowired
 	LeaveService leaveservice;
 	@Autowired
-	TaskService taskservice;
+	TaskService taskservice;//流程任务组件
 	@Autowired
 	HistoryService histiryservice;
 	@Autowired
@@ -79,7 +79,7 @@ public class ActivitiController {
 	String process(){
 		return "activiti/processlist";
 	}
-	
+	//上传工作流
 	@RequestMapping("/uploadworkflow")
 	public String fileupload(@RequestParam MultipartFile uploadfile,HttpServletRequest request){
 		try{
@@ -168,17 +168,20 @@ public class ActivitiController {
 	public String modifyapply(){
 		return "activiti/modifyapply"; 
 	}
+	//开始请假
 	@RequestMapping(value="/startleave",method=RequestMethod.POST)
 	@ResponseBody
 	public String start_leave(LeaveApply apply,HttpSession session){
 		String userid=(String) session.getAttribute("username");
 		Map<String,Object> variables=new HashMap<String, Object>();
 		variables.put("applyuserid", userid);
+		//流程实例
 		ProcessInstance ins=leaveservice.startWorkflow(apply, userid, variables);
 		System.out.println("流程id"+ins.getId()+"已启动");
 		return JSON.toJSONString("sucess");
 	}
 	
+	//部门领导审批
 	@RequestMapping(value="/depttasklist",produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public DataGrid<LeaveTask> getdepttasklist(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
@@ -241,7 +244,7 @@ public class ActivitiController {
 				return grid;
 			}
 	}
-	
+	//人事审批
 	@RequestMapping(value="/hrtasklist",produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public DataGrid<LeaveTask> gethrtasklist(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
@@ -305,6 +308,7 @@ public class ActivitiController {
 			}
 	}
 	
+	//销假列表
 	@RequestMapping(value="/xjtasklist",produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getXJtasklist(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
@@ -337,7 +341,7 @@ public class ActivitiController {
 		return JSON.toJSONString(grid);
 	}
 	
-	
+	//调整申请列表
 	@RequestMapping(value="/updatetasklist",produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getupdatetasklist(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
@@ -370,10 +374,13 @@ public class ActivitiController {
 		return JSON.toJSONString(grid);
 	}
 	
+	//获取需要处理的任务详情(点击处理时)
 	@RequestMapping(value="/dealtask")
 	@ResponseBody
 	public String taskdeal(@RequestParam("taskid") String taskid,HttpServletResponse response){
+		//获取任务
 		Task task=taskservice.createTaskQuery().taskId(taskid).singleResult();
+		//获取流程实例
 		ProcessInstance process=runservice.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
 		LeaveApply leave=leaveservice.getleave(new Integer(process.getBusinessKey()));
 		return JSON.toJSONString(leave);
@@ -384,30 +391,33 @@ public class ActivitiController {
 		return "/activiti/task-deptleaderaudit";
 	}
 	
+	//部门经理审批处理
 	@RequestMapping(value="/task/deptcomplete/{taskid}")
 	@ResponseBody
 	public String deptcomplete(HttpSession session,@PathVariable("taskid") String taskid,HttpServletRequest req){
 		String userid=(String) session.getAttribute("username");
 		Map<String,Object> variables=new HashMap<String,Object>();
 		String approve=req.getParameter("deptleaderapprove");
-		variables.put("deptleaderapprove", approve);
-		taskservice.claim(taskid, userid);
-		taskservice.complete(taskid, variables);
+		variables.put("deptleaderapprove", approve);//部门经理 同意/拒绝
+		Map<String, Object> taskMap = taskservice.getVariables(taskid);//获取流程变量,变量名称在.bpmn中定义
+		taskservice.claim(taskid, userid);//认领任务 claim会检查该任务是否已经被认领，如果被认领则会抛出ActivitiTaskAlreadyClaimedException 
+		taskservice.complete(taskid, variables);//完成任务 variables（任务所需要的参数） 
 		return JSON.toJSONString("success");
 	}
-	
+	//人事审批处理
 	@RequestMapping(value="/task/hrcomplete/{taskid}")
 	@ResponseBody
 	public String hrcomplete(HttpSession session,@PathVariable("taskid") String taskid,HttpServletRequest req){
 		String userid=(String) session.getAttribute("username");
 		Map<String,Object> variables=new HashMap<String,Object>();
 		String approve=req.getParameter("hrapprove");
-		variables.put("hrapprove", approve);
-		taskservice.claim(taskid, userid);
-		taskservice.complete(taskid, variables);
+		variables.put("hrapprove", approve);//人事 同意/拒绝
+		taskservice.claim(taskid, userid);//认领任务
+		taskservice.complete(taskid, variables);//完成任务,执行下一步
 		return JSON.toJSONString("success");
 	}
 	
+	//销假
 	@RequestMapping(value="/task/reportcomplete/{taskid}")
 	@ResponseBody
 	public String reportbackcomplete(@PathVariable("taskid") String taskid,HttpServletRequest req){
@@ -417,13 +427,14 @@ public class ActivitiController {
 		return JSON.toJSONString("success");
 	}
 	
+	//调整申请
 	@RequestMapping(value="/task/updatecomplete/{taskid}")
 	@ResponseBody
 	public String updatecomplete(@PathVariable("taskid") String taskid,@ModelAttribute("leave") LeaveApply leave,@RequestParam("reapply") String reapply){
 		leaveservice.updatecomplete(taskid,leave,reapply);
 		return JSON.toJSONString("success");
 	}
-	
+	//我正在参与的请假流程
 	@RequestMapping("involvedprocess")//参与的正在运行的请假流程
 	@ResponseBody
 	public DataGrid<RunningProcess> allexeution(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
@@ -431,6 +442,7 @@ public class ActivitiController {
 		String userid=(String) session.getAttribute("username");
 		ProcessInstanceQuery query = runservice.createProcessInstanceQuery();
 		int total= (int) query.count();
+		//根据流程定义的key查询流程实例
 		List<ProcessInstance> a = query.processDefinitionKey("leave").involvedUser(userid).listPage(firstrow, rowCount);
 		List<RunningProcess> list=new ArrayList<RunningProcess>();
 		for(ProcessInstance p:a){
@@ -449,6 +461,7 @@ public class ActivitiController {
 		return grid;
 	}
 	
+	//我的请假历史
 	@RequestMapping("/getfinishprocess")
 	@ResponseBody
 	public DataGrid<HistoryProcess> getHistory(HttpSession session,@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
@@ -503,6 +516,7 @@ public class ActivitiController {
 		return "activiti/myleaveprocess";
 	}
 	
+	//获得流程现在走到哪一步的图片文件
 	@RequestMapping("traceprocess/{executionid}")
 	public void traceprocess(@PathVariable("executionid")String executionid,HttpServletResponse response) throws Exception{
 		ProcessInstance process=runservice.createProcessInstanceQuery().processInstanceId(executionid).singleResult();
