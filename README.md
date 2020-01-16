@@ -1,1 +1,2 @@
-#### activiti
+- log4j升级log4j2 但是暂未配置log4j2.xml 也未在代码里将logger的包替换成log4j2的包 
+- spring4 升级spring5 
