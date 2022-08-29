@@ -3,3 +3,4 @@
 - [Activiti工作流-简单请假流程](https://blog.csdn.net/yk10010/article/details/80611188)
 - [Activiti 工作流中的表，原来表示的是这些](https://mp.weixin.qq.com/s/Xuya2_3YGtgH_K55oeNc3g)
 - [工作流引擎 Activiti 保姆级教程](https://mp.weixin.qq.com/s/AC12dCthXK35l4RRcjoqhg)
+- [Spring-activiti6](https://gitee.com/shenzhanwang/Spring-activiti)
