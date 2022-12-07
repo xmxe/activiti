@@ -5,3 +5,4 @@
 - [工作流引擎Activiti保姆级教程](https://mp.weixin.qq.com/s/AC12dCthXK35l4RRcjoqhg)
 - [Spring-activiti6](https://gitee.com/shenzhanwang/Spring-activiti)
 - [一万字带你入门Activiti工作流，通俗易懂！](https://mp.weixin.qq.com/s/FV_pDTrCyORwCwm1684ZUA)
+- [Spring Boot + Activiti完美结合，快速实现工作流](https://mp.weixin.qq.com/s/gEgq7s-YpnhKe8IiU_AIPQ)
