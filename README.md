@@ -6,3 +6,4 @@
 - [Spring-activiti6](https://gitee.com/shenzhanwang/Spring-activiti)
 - [一万字带你入门Activiti工作流，通俗易懂！](https://mp.weixin.qq.com/s/FV_pDTrCyORwCwm1684ZUA)
 - [Spring Boot + Activiti完美结合，快速实现工作流](https://mp.weixin.qq.com/s/gEgq7s-YpnhKe8IiU_AIPQ)
+- [Activiti工作流与业务整合实战](https://mp.weixin.qq.com/s/PA39c8Kp8qe1umhQZyQj7g)
