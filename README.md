@@ -7,3 +7,4 @@
 - [一万字带你入门Activiti工作流，通俗易懂！](https://mp.weixin.qq.com/s/FV_pDTrCyORwCwm1684ZUA)
 - [Spring Boot + Activiti完美结合，快速实现工作流](https://mp.weixin.qq.com/s/gEgq7s-YpnhKe8IiU_AIPQ)
 - [Activiti工作流与业务整合实战](https://mp.weixin.qq.com/s/PA39c8Kp8qe1umhQZyQj7g)
+- [史上最全Activiti学习教程，一文搞定最强工作流引擎！](https://mp.weixin.qq.com/s/B93tlgp0Jig0mm5OX9LQxg)
