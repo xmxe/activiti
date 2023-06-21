@@ -1,5 +1,5 @@
-- 注意：log4j升级log4j2 但是暂未配置log4j2.xml 也未在代码里将logger的包替换成log4j2的包 
-------
+> 注意：项目里的log4j已升级为log4j2,但是暂未配置log4j2.xml,也未在代码里将logger的包替换成log4j2的包(这就是为什么需要使用slf4j)
+
 - [Activiti工作流-简单请假流程](https://blog.csdn.net/yk10010/article/details/80611188)
 - [Activiti工作流中的表，原来表示的是这些](https://mp.weixin.qq.com/s/Xuya2_3YGtgH_K55oeNc3g)
 - [工作流引擎Activiti保姆级教程](https://mp.weixin.qq.com/s/AC12dCthXK35l4RRcjoqhg)
